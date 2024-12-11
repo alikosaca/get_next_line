@@ -12,6 +12,89 @@
 
 #include "ft_get_next_line.h"
 
+char *ft_read_line(int fd, char *remainder)
+{
+    int bytes_read;
+    int status;
+    char *tmp;
+    status = 1; // satırın sonuna geldiysek 0 olacak ve döngüden çıkacak
+    remainder = (char *)malloc(BUFFER_SIZE + 1);
+    bytes_read = read(fd, remainder, BUFFER_SIZE);
+    if(bytes_read <= 0)
+        return NULL;
+    while (bytes_read > 0 && status) //böyle yazmak yerine direkt ft_strchr(buffer, '\n'); buraya'da yazabilirim
+    {
+        bytes_read = read(fd, tmp, BUFFER_SIZE);
+        if(bytes_read <= 0)
+		{
+			free(remainder);
+			free(tmp);
+            return (NULL);
+
+		}
+		tmp[bytes_read] = '\0';
+        remainder = ft_strjoin(remainder, tmp);
+        status = ft_strchr(remainder, '\n');
+    }
+	free(tmp);
+    return (remainder);
+}
+
+char *ft_before_next_line(char *remainder)
+{
+	char	*buffer;
+	int		i;
+
+	i = 0;
+	while (remainder[i] != '\n')
+	{
+		buffer[i] = remainder[i];
+		i++;
+	}
+	buffer = malloc(sizeof(char) * i + 2);
+	if (!buffer)
+		return (NULL);
+	buffer = ft_strlcpy(buffer, remainder, i + 1);
+	return (buffer);
+	
+}
+
+char *ft_new_line(char *remainder)
+{
+	char	*tmp;
+	int		i;
+
+	i = 0;
+	while (remainder[i] && remainder[i] != '\n')
+		i++;
+	tmp = malloc(sizeof(char) * ft_strlen(remainder) - i + 1);
+	if(!tmp)
+	{
+		free(remainder);
+		return (NULL);
+	}
+	ft_strlcpy(tmp, remainder + i, ft_strlen(remainder + i));
+	free(remainder);
+	return (tmp);
+
+}
+
+
+
+char *get_next_line(int fd)
+{
+    static char *remainder;
+    char        *buffer;
+    if (fd < 0 || BUFFER_SIZE <= 0)
+        return (NULL);
+    remainder = ft_read_line(fd, remainder); //ilk satır ve biraz fazlasını aldık
+	if (!remainder)
+		return (NULL);
+	buffer = ft_before_next_line(remainder);
+	remainder = ft_new_line(remainder);
+	return (buffer);
+}
+
 
 // static char *extract_line(char *buffer) {
 // size_t i = 0;
@@ -78,7 +161,7 @@
 //     return line;
 // }
 //-------------------------------------------------
-char	*ft_strchr(const char *s, int c)
+/* char	*ft_strchr(const char *s, int c)
 {
 	while (*s)
 	{
@@ -150,7 +233,7 @@ char *get_next_line(int fd)
 	
 
 }
-
+ */
 // struct'sız
 // char *get_next_line(int fd)
 // {
