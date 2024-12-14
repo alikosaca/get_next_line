@@ -11,21 +11,23 @@
 /* ************************************************************************** */
 
 #ifndef FT_GET_NEXT_LINE_H
-#define FT_GET_NEXT_LINE_H
-#ifndef BUFFER_SIZE
-#define BUFFER_SIZE 42
-#endif
+# define FT_GET_NEXT_LINE_H
+# ifndef BUFFER_SIZE
+#  define BUFFER_SIZE 3
+# endif
 
 #include <fcntl.h>
 #include <stdio.h>
-#include <unistd.h>
-#include <stdlib.h>
-char *get_next_line(int fd);
-char *ft_strjoin(char *s1, char *s2);
-char *ft_strchr(const char *s, int c);
-size_t ft_strlen(const char *s);
-char    *ft_strdup(char *s1);
-char *ft_strlcpy(char *dest, const char *src, size_t dstsize);
+# include <unistd.h>
+# include <stdlib.h>
+#include <string.h>
 
-char *get_next_line(int fd);
-char get_next_line_utils();
+char	*get_next_line(int fd);
+char	*ft_strjoin(char *s1, char *s2);
+int		ft_strchr(const char *s);
+size_t	ft_strlen(const char *s);
+char	*ft_strcpy(char *s1, char *s2, int n);
+
+char	*get_next_line(int fd);
+
+#endif
