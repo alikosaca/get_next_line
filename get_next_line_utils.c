@@ -29,10 +29,10 @@ int	ft_strchr(const char *s)
 	while (*s)
 	{
 		if (*s == '\n')
-			return (1);
+			return (0);
 		s++;
 	}
-	return (0);
+	return (1);
 }
 
 char    *ft_strjoin(char *s1, char *s2)

@@ -14,7 +14,7 @@
 
 char *ft_readline(int fd, char *temporary)
 {
-	int		byte_size;
+	ssize_t	byte_size;
 	int		status;
 	char	*str;
 
@@ -74,13 +74,12 @@ char *ft_new_line(char *stash)
 		return (NULL);
 	}
 	next_line = malloc(ft_strlen(stash) - i + 1);
+
 	if (!next_line)
-    	return (NULL);
-	// if (!next_line)
-	// {
-	// 	free(stash);
-	// 	return (NULL);
-	// }
+	{
+		free(stash);
+		return (NULL);
+	}
 	i++;
 	while (stash[i])
 		next_line[j++] = stash[i++];
@@ -92,14 +91,14 @@ char *ft_new_line(char *stash)
 char    *get_next_line(int fd)
 {
 	static char	*buffer;
-	char		*remainder;
+	char		*line;
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
 	buffer = ft_readline(fd, buffer);
 	if (!buffer)
 		return (NULL);
-	remainder = ft_before_next_line(buffer);
+	line = ft_before_next_line(buffer);
 	buffer = ft_new_line(buffer);
 
-	return (remainder);
+	return (line);
 }
